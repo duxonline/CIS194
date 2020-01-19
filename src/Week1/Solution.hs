@@ -1,4 +1,4 @@
-module Week1 where
+module Week1.Solution where
 
 toDigits :: Int -> [Int]
 toDigits n

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 44edb6f868251e66dbdce72479e69b6841cdf71fc771ea26a3088e43d64f62d3
+-- hash: 49683eaaa8c8995dc15c07c08b485f47938567ba963bbd1b7e9e238799cd0fbf
 
 name:           CIS194
 version:        0.1.0.0
@@ -28,7 +28,10 @@ source-repository head
 library
   exposed-modules:
       Lib
-      Week1
+      Week1.Solution
+      Week2.Lecture
+      Week2.Log
+      Week2.Solution
   other-modules:
       Paths_CIS194
   hs-source-dirs:
