@@ -21,11 +21,11 @@ parseMessage s =
         "E":level:ts:m -> LogMessage (Error (read level)) (read ts) (unwords m)
         _ -> Unknown s
 
-parse :: String -> [LogMessage]
-parse log = map parseMessage $ lines log
+parseLog :: String -> [LogMessage]
+parseLog log = map parseMessage $ lines log
 
-readLogFile :: FilePath -> IO [LogMessage]
-readLogFile path = parse <$> readFile path 
+parseLogFile :: FilePath -> IO [LogMessage]
+parseLogFile path = parseLog <$> readFile path 
 
 insert :: LogMessage -> MessageTree -> MessageTree
 insert msg@(Unknown _) tree = tree
@@ -37,3 +37,7 @@ insert msg1@(LogMessage _ m1 _) tree@(Node left msg2@(LogMessage _ m2 _) right)
 build :: [LogMessage] -> MessageTree
 build [] = Leaf
 build (x:zs) = insert x $ build zs
+
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node left msg right) = inOrder left ++ [msg] ++ inOrder right
