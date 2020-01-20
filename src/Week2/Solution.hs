@@ -10,6 +10,9 @@ data LogMessage = LogMessage MessageType TimeStamp String
                 | Unknown String
                 deriving (Show, Eq)
 
+data MessageTree = Leaf
+                | Node MessageTree LogMessage MessageTree                
+
 parseMessage :: String -> LogMessage
 parseMessage s = 
     case words s of
@@ -23,3 +26,14 @@ parse log = map parseMessage $ lines log
 
 readLogFile :: FilePath -> IO [LogMessage]
 readLogFile path = parse <$> readFile path 
+
+insert :: LogMessage -> MessageTree -> MessageTree
+insert msg@(Unknown _) tree = tree
+insert msg Leaf = Node Leaf msg Leaf
+insert msg1@(LogMessage _ m1 _) tree@(Node left msg2@(LogMessage _ m2 _) right) 
+    | m1 < m2 = Node (insert msg1 left) msg2 right
+    | otherwise = Node left msg2 (insert msg1 right)
+
+build :: [LogMessage] -> MessageTree
+build [] = Leaf
+build (x:zs) = insert x $ build zs
