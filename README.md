@@ -1,1 +1,1 @@
-# CIS194
+The solutions to CIS 194: Introduction to Haskell
