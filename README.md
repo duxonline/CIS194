@@ -1,1 +1,1 @@
-The solutions to CIS 194: Introduction to Haskell
+The solutions to the exercises in CIS 194 (2013 Spring): Introduction to Haskell
