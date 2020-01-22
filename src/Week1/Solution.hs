@@ -1,5 +1,7 @@
 module Week1.Solution where
 
+type Peg = String
+
 toDigits :: Int -> [Int]
 toDigits n
     | n > 0 = toDigits (n `div` 10) ++ [n `mod` 10]
@@ -7,7 +9,7 @@ toDigits n
 
 toDigitsRev :: Int -> [Int]
 toDigitsRev n
-    | n > 0 = [n `mod` 10] ++ toDigitsRev(n `div` 10)
+    | n > 0 = n `mod` 10 : toDigitsRev(n `div` 10)
     | otherwise = []
 
 doubleEveryOther :: [Int] -> [Int]
@@ -25,3 +27,8 @@ validate n =
 reverse2 :: [Int] -> [Int]
 reverse2 [] = []
 reverse2 (x:zs) = reverse2 zs ++ [x]
+
+hanoi :: Int -> Peg -> Peg -> Peg -> [(Peg, Peg)]
+hanoi 0 _ _ _ = []
+hanoi 1 src target temp = [(src, target)]
+hanoi n src target temp = hanoi (n-1) src temp target ++ [(src,target)] ++ hanoi (n-1) temp target src
