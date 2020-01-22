@@ -29,6 +29,7 @@ reverse2 [] = []
 reverse2 (x:zs) = reverse2 zs ++ [x]
 
 hanoi :: Int -> Peg -> Peg -> Peg -> [(Peg, Peg)]
-hanoi 0 _ _ _ = []
-hanoi 1 src target temp = [(src, target)]
-hanoi n src target temp = hanoi (n-1) src temp target ++ [(src,target)] ++ hanoi (n-1) temp target src
+hanoi n src target temp
+    | n <= 0 = []
+    | n == 1 = [(src, target)]
+    | otherwise = hanoi (n-1) src temp target ++ [(src,target)] ++ hanoi (n-1) temp target src
