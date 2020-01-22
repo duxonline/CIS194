@@ -35,8 +35,9 @@ insert msg1@(LogMessage _ m1 _) tree@(Node left msg2@(LogMessage _ m2 _) right)
     | otherwise = Node left msg2 (insert msg1 right)
 
 build :: [LogMessage] -> MessageTree
-build [] = Leaf
-build (x:zs) = insert x $ build zs
+-- build [] = Leaf
+-- build (x:zs) = insert x $ build zs
+build = foldr insert Leaf
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
