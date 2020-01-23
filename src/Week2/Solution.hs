@@ -59,7 +59,10 @@ extractMsgs (LogMessage _ _ msg:sz) = msg : extractMsgs sz
 -- whatWentWrong :: FilePath -> [String]
 -- whatWentWrong path = inOrder <$> build <$> parseFile path
 
+-- :l src/Week2/Solution.hs
 -- let logs = parseFile "./src/Week2/sample.log"
 -- let tree = build <$> logs
 -- let slogs = inOrder <$> tree
 -- filter (filterMsg 50) <$> slogs
+-- let errors = filterMsgs <$> slogs
+-- let result = extractMsgs <$> errors
