@@ -24,8 +24,8 @@ parseMessage s =
 parseLog :: String -> [LogMessage]
 parseLog log = map parseMessage $ lines log
 
-parseLogFile :: FilePath -> IO [LogMessage]
-parseLogFile path = parseLog <$> readFile path 
+parseFile :: FilePath -> IO [LogMessage]
+parseFile path = parseLog <$> readFile path 
 
 insert :: LogMessage -> MessageTree -> MessageTree
 insert msg@(Unknown _) tree = tree
@@ -42,3 +42,15 @@ build = foldr insert Leaf
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf = []
 inOrder (Node left msg right) = inOrder left ++ [msg] ++ inOrder right
+
+isError :: Int -> LogMessage -> Bool
+isError level (LogMessage (Error severity) _ _)
+    | severity > level = True 
+    | otherwise = False 
+isError _ _ = False
+
+filterMsgs :: IO [LogMessage] -> IO [LogMessage]
+filterMsgs msgs = filter (isError 50) <$> msgs
+
+-- whatWentWrong :: FilePath -> [String]
+-- whatWentWrong path = inOrder <$> build <$> parseFile path
