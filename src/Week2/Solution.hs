@@ -65,6 +65,14 @@ whatWentWrong path level=
         slogs = inOrder <$> tree
         errors = filterMsgs level <$> slogs
 
+whatWentWrong2 :: FilePath -> Int -> IO [String]
+whatWentWrong2 path level=
+    let logs = parseFile path
+        tree = build <$> logs
+        slogs = inOrder <$> tree
+        errors = filterMsgs level <$> slogs   
+    in  extractMsgs <$> errors     
+
 -- :l src/Week2/Solution.hs
 -- let logs = parseFile "./src/Week2/sample.log"
 -- let tree = build <$> logs
