@@ -1,10 +1,10 @@
 module Week3.Solution where
 
-skips :: [a] -> [[a]]    
-skips list = [each i list | i <- [1..length list -1]]
+skips :: [a] -> [[a]]
+skips lst = [each i lst | i <- [1..length lst -1]]
 
 each :: Int -> [a] -> [a]
-each n list = [ list !! i | i <- [n-1, n-1+n..length list -1]]
+each n lst = [ lst !! i | i <- [n-1, n-1+n..length lst -1]]
 
 localMaxima :: [Integer] -> [Integer]
 localMaxima (x:y:z:zx)
@@ -14,4 +14,4 @@ localMaxima _ = []
 
 
 frequency :: [Int] -> [Int]
-frequency lst = [ length (filter (==x) lst) | x <- [0..9]]
+frequency lst = [length (filter (==x) lst) | x <- [0..9]]
