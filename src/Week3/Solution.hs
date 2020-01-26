@@ -11,3 +11,7 @@ localMaxima (x:y:z:zx)
     | x < y && y > z = y : localMaxima (y:z:zx)
     | otherwise = localMaxima (y:z:zx)
 localMaxima _ = []
+
+
+frequency :: [Int] -> [Int]
+frequency lst = [ length (filter (==x) lst) | x <- [0..9]]
