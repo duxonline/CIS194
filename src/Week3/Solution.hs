@@ -12,6 +12,13 @@ localMaxima (x:y:z:zx)
     | otherwise = localMaxima (y:z:zx)
 localMaxima _ = []
 
+histogram :: [Int] -> String
+histogram lst = 
+    unlines (map (createLine f) [m+1, m..1]) ++ "==========\n0123456789\n"
+    where 
+        f = frequency lst
+        m = maximum f
+
 createLine :: [Int] -> Int -> String
 createLine lst n = [if x >= n then '*' else ' ' | x <- lst]
 
