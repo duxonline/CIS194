@@ -1,5 +1,7 @@
 module Week4.Solution where
 
+import Data.List
+
 -- fun1 :: [Integer] -> Integer
 -- fun1 [] = 1
 -- fun1 (x:xs)
@@ -45,5 +47,25 @@ xor = foldr (\x y -> (x || y) && not(x && y)) False
 myFoldL :: (a -> b -> a) -> a -> [b] -> a
 myFoldL f z lst = foldr (flip f) z (reverse lst)
 
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram n = (+1) . (*2) <$> [1..n] \\ nonPrimes
+  where
+    nonPrimes = takeWhile (<n) $ map (uncurry ij2ij) $ cartProd [1..] [1..]
+      where
+        ij2ij i j = i + j + 2 * i * j
+
+sieveSundaram2 :: Integer -> [Integer]
+sieveSundaram2 n = map ((+1) . (*2)) $ [1..n] \\ sieve
+    where 
+        sieve = map (\(i,j) -> i + j + 2 * i * j) 
+                . filter (\(i,j) -> i + j + 2 * i * j <= n) 
+                $ cartProd [1..n] [1..n]
+
+sieveSundaram3 :: Integer -> [Integer]
+sieveSundaram3 n = map ((+1) . (*2)) $ [1..n] \\ sieve
+  where sieve = filter (<=n)
+                . map (\(i, j) -> i + j + 2*i*j)
+                $ cartProd [1..n] [1..n]
+        
 cartProd :: [a] -> [b] -> [(a,b)]
 cartProd xs ys = [(x,y) | x <- xs, y <- ys]
