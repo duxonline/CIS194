@@ -35,3 +35,6 @@ foldTree lst = Node height
                 len = length lst
                 half = len `div` 2
                 height = floor (logBase 2 (fromIntegral len))
+
+xor :: [Bool] -> Bool
+xor = odd . length . filter (==True)
