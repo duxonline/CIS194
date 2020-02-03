@@ -20,3 +20,18 @@ fun2 = sum
       .filter even
       .takeWhile (/=1)
       .iterate (\n -> if even n then n `div` 2 else 3 * n +1)
+
+data Tree a = Leaf
+            | Node Integer (Tree a) a (Tree a)
+    deriving (Show, Eq)
+
+foldTree :: [a] -> Tree a
+foldTree [] = Leaf
+foldTree lst = Node height
+               (foldTree $ take half lst)
+               (lst !! half)
+               (foldTree $ drop (half+1) lst)
+            where
+                len = length lst
+                half = len `div` 2
+                height = floor (logBase 2 (fromIntegral len))
