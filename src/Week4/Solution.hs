@@ -41,3 +41,6 @@ foldTree lst = Node height
 
 xor :: [Bool] -> Bool
 xor = foldr (\x y -> (x || y) && not(x && y)) False
+
+myFoldL :: (a -> b -> a) -> a -> [b] -> a
+myFoldL f z lst = foldr (flip f) z (reverse lst)
