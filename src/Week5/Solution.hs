@@ -22,3 +22,9 @@ instance Expr ExprT where
     lit = Lit
     add = Add
     mul = Mul
+
+reify :: ExprT -> ExprT
+reify = id
+
+-- :t mul (add (lit 2) (lit 3)) (lit 4)
+-- :t reify $ mul (add (lit 2) (lit 3)) (lit 4)
