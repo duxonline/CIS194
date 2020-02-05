@@ -28,3 +28,32 @@ reify = id
 
 -- :t mul (add (lit 2) (lit 3)) (lit 4)
 -- :t reify $ mul (add (lit 2) (lit 3)) (lit 4)
+
+instance Expr Integer where
+    lit = id
+    add = (+)
+    mul = (*)
+
+instance Expr Bool where
+    lit x
+        | x <= 0 = False 
+        | x > 0 = True
+    add = (||)
+    mul = (&&)
+
+newtype MinMax = MinMax Integer deriving (Eq, Show)
+
+instance Expr MinMax where
+    lit = MinMax
+    add (MinMax x) (MinMax y) = MinMax (x + y)
+    mul (MinMax x) (MinMax y) = MinMax (x * y)
+
+newtype Mod7 = Mod7 Integer deriving (Eq, Show)
+
+instance Expr Mod7 where
+    lit = Mod7 . (`mod` 7)
+    add (Mod7 x) (Mod7 y) = Mod7 ((x+y) `mod` 7)
+    mul (Mod7 x) (Mod7 y) = Mod7 ((x*y) `mod` 7)
+
+testExp :: Expr a => Maybe a
+testExp = parseExp lit add mul "(3 * -4) + 5"
