@@ -1,7 +1,10 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Week5.Solution where
 
 import Week5.ExprT
 import Week5.Parser
+import qualified Week5.StackVM as S
+import           Data.Maybe
 
 eval :: ExprT -> Integer
 eval (Lit l) = l
@@ -10,10 +13,10 @@ eval (Mul exp1 exp2) = eval exp1 * eval exp2
 
 evalStr :: String -> Maybe Integer
 evalStr s = case parseExp Lit Add Mul s of
-            Nothing -> Nothing 
+            Nothing -> Nothing
             Just p -> Just $ eval p
 
-class Expr a where 
+class Expr a where
     lit :: Integer -> a
     add :: a -> a -> a
     mul :: a -> a -> a
@@ -36,7 +39,7 @@ instance Expr Integer where
 
 instance Expr Bool where
     lit x
-        | x <= 0 = False 
+        | x <= 0 = False
         | x > 0 = True
     add = (||)
     mul = (&&)
@@ -57,3 +60,18 @@ instance Expr Mod7 where
 
 testExp :: Expr a => Maybe a
 testExp = parseExp lit add mul "(3 * -4) + 5"
+
+instance Expr S.Program where
+    lit i = [S.PushI i]
+    add a b = a ++ b ++ [S.Add]
+    mul a b = a ++ b ++ [S.Mul]
+
+compile :: String -> Maybe S.Program
+compile = parseExp lit add mul
+
+-- compile "(2+3)*4"
+
+evalStack :: String -> Either String S.StackVal
+evalStack = S.stackVM . fromMaybe [] . compile
+
+-- evalStack "(2+3)*4"
