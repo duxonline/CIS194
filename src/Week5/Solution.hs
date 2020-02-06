@@ -4,7 +4,8 @@ module Week5.Solution where
 import Week5.ExprT
 import Week5.Parser
 import qualified Week5.StackVM as S
-import           Data.Maybe
+import qualified Data.Map as M
+import Data.Maybe
 
 eval :: ExprT -> Integer
 eval (Lit l) = l
@@ -38,9 +39,7 @@ instance Expr Integer where
     mul = (*)
 
 instance Expr Bool where
-    lit x
-        | x <= 0 = False
-        | x > 0 = True
+    lit x = x > 0
     add = (||)
     mul = (&&)
 
@@ -75,3 +74,42 @@ evalStack :: String -> Either String S.StackVal
 evalStack = S.stackVM . fromMaybe [] . compile
 
 -- evalStack "(2+3)*4"
+
+class HasVars a where
+    var :: String -> a
+
+data VarExprT = VLit Integer
+              | VAdd VarExprT VarExprT
+              | VMul VarExprT VarExprT
+              | Var String
+    deriving (Eq, Show)
+
+instance Expr VarExprT where
+    lit = VLit
+    add = VAdd
+    mul = VMul
+
+instance HasVars VarExprT where
+    var = Var
+
+
+type MapExpr = M.Map String Integer -> Maybe Integer
+
+instance HasVars MapExpr where
+    var = M.lookup
+
+instance Expr MapExpr where
+    lit a = (\_ -> Just a)
+    add a b = (\vs -> (+) <$> a vs <*> b vs)
+    mul a b = (\vs -> (*) <$> a vs <*> b vs)
+
+withVars :: [(String, Integer)]
+         -> (M.Map String Integer -> Maybe Integer)
+         -> Maybe Integer
+withVars vs mexp = mexp $ M.fromList vs
+
+test = do
+  print $ withVars [("x", 6)] $ add (lit 3) (var "x")
+  print $ withVars [("x", 6)] $ add (lit 3) (var "y")
+  print $ withVars [("x", 6), ("y", 3)]
+    $ mul (var "x") (add (var "y") (var "x"))
