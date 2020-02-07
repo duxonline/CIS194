@@ -12,10 +12,20 @@ eval (Lit l) = l
 eval (Add exp1 exp2) = eval exp1 + eval exp2
 eval (Mul exp1 exp2) = eval exp1 * eval exp2
 
+test1 =
+  print $ eval (Mul (Add (Lit 2) (Lit 3)) (Lit 4)) == 20
+-----------------------------------------------------------
+
 evalStr :: String -> Maybe Integer
 evalStr s = case parseExp Lit Add Mul s of
             Nothing -> Nothing
             Just p -> Just $ eval p
+
+test2 = do
+  print $ evalStr "(2+3)*4" == Just 20
+  print $ evalStr "2+3*4" == Just 14
+  print $ evalStr "2+3*" == Nothing         
+-----------------------------------------------------------
 
 class Expr a where
     lit :: Integer -> a
@@ -30,8 +40,10 @@ instance Expr ExprT where
 reify :: ExprT -> ExprT
 reify = id
 
--- :t mul (add (lit 2) (lit 3)) (lit 4)
--- :t reify $ mul (add (lit 2) (lit 3)) (lit 4)
+test3 = do
+  print $ (reify $ mul (add (lit 2) (lit 3)) (lit 4))
+    == Mul (Add (Lit 2) (Lit 3)) (Lit 4)
+-----------------------------------------------------------
 
 instance Expr Integer where
     lit = id
@@ -60,6 +72,13 @@ instance Expr Mod7 where
 testExp :: Expr a => Maybe a
 testExp = parseExp lit add mul "(3 * -4) + 5"
 
+test4 = do
+  mapM_ print (testExp :: Maybe Integer)
+  mapM_ print (testExp :: Maybe Bool)
+  mapM_ print (testExp :: Maybe MinMax)
+  mapM_ print (testExp :: Maybe Mod7)
+-----------------------------------------------------------
+
 instance Expr S.Program where
     lit i = [S.PushI i]
     add a b = a ++ b ++ [S.Add]
@@ -68,13 +87,16 @@ instance Expr S.Program where
 compile :: String -> Maybe S.Program
 compile = parseExp lit add mul
 
--- compile "(2+3)*4"
-
 evalStack :: String -> Either String S.StackVal
 evalStack = S.stackVM . fromMaybe [] . compile
 
--- evalStack "(2+3)*4"
+test5 = do
+    let Just exp = compile "(2+3)*4"
+    print exp
 
+    let Right v = evalStack "(2+3)*4"
+    print v
+-----------------------------------------------------------
 class HasVars a where
     var :: String -> a
 
@@ -84,14 +106,13 @@ data VarExprT = VLit Integer
               | Var String
     deriving (Eq, Show)
 
+instance HasVars VarExprT where
+    var = Var
+
 instance Expr VarExprT where
     lit = VLit
     add = VAdd
     mul = VMul
-
-instance HasVars VarExprT where
-    var = Var
-
 
 type MapExpr = M.Map String Integer -> Maybe Integer
 
@@ -108,7 +129,7 @@ withVars :: [(String, Integer)]
          -> Maybe Integer
 withVars vs mexp = mexp $ M.fromList vs
 
-test = do
+test6 = do
   print $ withVars [("x", 6)] $ add (lit 3) (var "x")
   print $ withVars [("x", 6)] $ add (lit 3) (var "y")
   print $ withVars [("x", 6), ("y", 3)]
