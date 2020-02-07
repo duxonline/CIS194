@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 461f389b634ef5581d7c5b32c423733604cf5463e9b2ec4a3de0e0dbaee0f93e
+-- hash: baaa8b28cbd30f9a1846b2ca3aaa1bcfad292b154d5488ec0c5e812ffb63cd44
 
 name:           CIS194
 version:        0.1.0.0
@@ -38,6 +38,7 @@ library
       Week5.Parser
       Week5.Solution
       Week5.StackVM
+      Week6.Solution
   other-modules:
       Paths_CIS194
   hs-source-dirs:
