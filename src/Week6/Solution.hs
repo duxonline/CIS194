@@ -37,10 +37,10 @@ test3 = do
 -----------------------------------------------------------
 
 streamRepeat :: a -> Stream a
-streamRepeat = undefined 
+streamRepeat n = Const n (streamRepeat n)
 
 streamMap :: (a -> b) -> Stream a -> Stream b
-streamMap = undefined
+streamMap f (Const x xs) = Const (f x) (streamMap f xs)
 
 streamFromSeed :: (a -> a) -> a -> Stream a
 streamFromSeed = undefined
