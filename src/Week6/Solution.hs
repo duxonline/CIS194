@@ -1,5 +1,8 @@
 module Week6.Solution where
 
+import Numeric (showHex, showIntAtBase)
+import Data.Char (intToDigit)
+
 fib :: Integer -> Integer
 fib 0 = 0
 fib 1 = 1
@@ -24,7 +27,7 @@ streamToList :: Stream a -> [a]
 streamToList (Const x xs) = x : streamToList xs
 
 instance Show a => Show (Stream a) where
-    show = show . take 20 . streamToList
+    show = show . take 100 . streamToList
 
 fromList :: [a] -> Stream a
 fromList a = case cycle a of
@@ -49,3 +52,13 @@ test4 = do
   print $ streamRepeat 42
   print $ streamMap (*2) (fromList [1..])
   print $ streamFromSeed (*2) 1
+-----------------------------------------------------------
+
+nats :: Stream Integer
+nats = streamFromSeed (+1) 0
+
+ruler :: Stream Integer
+ruler = undefined 
+
+exercise5 = do
+  print $ nats
