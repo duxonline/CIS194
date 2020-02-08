@@ -35,3 +35,12 @@ test3 = do
     print $ fromList [21..30]
     print $ fromList ['a'..]
 -----------------------------------------------------------
+
+streamRepeat :: a -> Stream a
+streamRepeat = undefined 
+
+streamMap :: (a -> b) -> Stream a -> Stream b
+streamMap = undefined
+
+streamFromSeed :: (a -> a) -> a -> Stream a
+streamFromSeed = undefined
