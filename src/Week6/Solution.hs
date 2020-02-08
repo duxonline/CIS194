@@ -43,4 +43,9 @@ streamMap :: (a -> b) -> Stream a -> Stream b
 streamMap f (Const x xs) = Const (f x) (streamMap f xs)
 
 streamFromSeed :: (a -> a) -> a -> Stream a
-streamFromSeed = undefined
+streamFromSeed f x = Const (f x) (streamFromSeed f (f x))
+
+test4 = do
+  print $ streamRepeat 42
+  print $ streamMap (*2) (fromList [1..])
+  print $ streamFromSeed (*2) 1
