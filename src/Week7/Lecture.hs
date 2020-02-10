@@ -67,11 +67,3 @@ instance Num a => Semigroup (Product a) where
 instance Num a => Monoid (Product a) where
   mempty = Product 1
   mappend = (*)
-
-instance Semigroup Bool where
-  (<>) = (||)
-
-instance Monoid Bool where
-  mempty = False
-  mappend = (||)
-
