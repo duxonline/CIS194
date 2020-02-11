@@ -1,6 +1,7 @@
 module Week7.Solution where
 
 import qualified Week7.Lecture as L
+import qualified Week7.Sized as S
 
 data JoinList m a = Empty
                     | Single m a
@@ -23,6 +24,20 @@ someJoinList =
         (Single (L.Product 2) 'e')
         (Single (L.Product 3) 'a')))
     (Single (L.Product 7) 'h')
+
+(!!?) :: [a] -> Int -> Maybe a
+[]      !!? _ =          Nothing
+_       !!? n | n < 0 =  Nothing 
+(x:xs)  !!? 0 =          Just x
+(x:xs)  !!? n =          xs !!? (n-1)
+
+jlToList :: JoinList m a -> [a]
+jlToList Empty =        []
+jlToList (Single _ a) = [a]
+jlToList (Append _ l r) = jlToList l ++ jlToList r
+
+indexJ :: (S.Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
+indexJ n lst = jlToList lst !!? n
 
 test1 = do
   print . L.getProduct . tag $ someJoinList
