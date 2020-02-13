@@ -42,15 +42,15 @@ indexJ n lst = jlToList lst !!? n
 dropJ :: (S.Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
 dropJ n jl@(Single _ _)
   | n <= 0 = jl
-dropJ n jl@(Append m jl1 jl2)
-  | n >= size0 = Empty
-  | n < size1  = dropJ n jl1 +++ jl2
-  | n > 0      = dropJ (n - size1) jl2
-  | otherwise  = jl
-    where
-      size0 = S.getSize . S.size $ m
-      size1 = S.getSize . S.size . tag $ jl1
+dropJ n jlst@(Append m jl jr)
+  | n > totalSize = Empty
+  | n >= leftSize = dropJ (n-leftSize) jr
+  | n > 0         = dropJ n jl +++ jr
+  | otherwise     = jlst
+  where totalSize = S.getSize . S.size $ m
+        leftSize = S.getSize . S.size . tag $ jl
 dropJ _ _ = Empty
+
 
 takeJ :: (S.Sized b, Monoid b)
       => Int -> JoinList b a -> JoinList b a
