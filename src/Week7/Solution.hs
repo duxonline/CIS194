@@ -43,7 +43,7 @@ dropJ :: (S.Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
 dropJ n jl@(Single _ _)
   | n <= 0 = jl
 dropJ n jlst@(Append m jl jr)
-  | n > totalSize = Empty
+  | n >= totalSize = Empty
   | n >= leftSize = dropJ (n-leftSize) jr
   | n > 0         = dropJ n jl +++ jr
   | otherwise     = jlst
@@ -56,12 +56,13 @@ takeJ :: (S.Sized b, Monoid b)
 takeJ n jl@(Single _ _)
   | n == 1 = jl
 takeJ n jlst@(Append m jl jr)
-  | n > totalSize   = jlst
+  | n >= totalSize   = jlst
   | n > leftSize    = jl +++ takeJ (n-leftSize) jr
   | n > 0           = takeJ n jl
   | otherwise       = Empty
   where totalSize = S.getSize . S.size $ m
         leftSize = S.getSize . S.size . tag $ jl
+takeJ _ _ = Empty
 
 az :: JoinList S.Size Char
 az = foldr1 (+++) $ Single (S.Size 1) <$> ['a'..'z']
