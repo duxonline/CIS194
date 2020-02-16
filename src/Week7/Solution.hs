@@ -2,6 +2,8 @@ module Week7.Solution where
 
 import qualified Week7.Lecture as L
 import qualified Week7.Sized as S
+import qualified Week7.Scrabble as B
+import           Data.Char
 
 data JoinList m a = Empty
                     | Single m a
@@ -66,6 +68,27 @@ takeJ _ _ = Empty
 
 createList :: JoinList S.Size Char
 createList = foldr1 (+++) $ Single (S.Size 1) <$> ['a'..'z']
+
+score :: Char -> B.Score
+score c
+  | c' `elem` "aeilnorstu" = B.Score 1
+  | c' `elem` "dg"         = B.Score 2
+  | c' `elem` "bcmp"       = B.Score 3
+  | c' `elem` "fhvwy"      = B.Score 4
+  | c' `elem` "k"          = B.Score 5
+  | c' `elem` "jx"         = B.Score 8
+  | c' `elem` "qz"         = B.Score 10
+  | otherwise              = B.Score 0
+    where c' = toLower c
+
+-- scoreString :: String -> B.Score
+-- scoreString = foldr ((+) . score) (B.Score 0)
+
+scoreString :: String -> B.Score
+scoreString xs = mconcat (score <$> xs)
+
+scoreLine :: String -> JoinList B.Score String
+scoreLine = undefined
 
 test1 = do
   print . L.getProduct . tag $ someJoinList
