@@ -73,3 +73,7 @@ test1 = do
   print (Empty :: JoinList (L.Product Int) Char)
   print (Empty +++ Empty :: JoinList (L.Product Int) Char)
   print $ Single (L.Product 2) 'a' +++ Single (L.Product 3) 'b'
+
+test2 = do
+  print $ takeJ 1 createList
+  print $ dropJ 1 createList
