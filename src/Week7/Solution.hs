@@ -88,7 +88,7 @@ scoreString :: String -> B.Score
 scoreString xs = mconcat (score <$> xs)
 
 scoreLine :: String -> JoinList B.Score String
-scoreLine = undefined
+scoreLine xs = Single (scoreString xs) xs
 
 test1 = do
   print . L.getProduct . tag $ someJoinList
@@ -100,3 +100,6 @@ test1 = do
 test2 = do
   print $ takeJ 1 createList
   print $ dropJ 1 createList
+
+test3 =
+  print $ scoreLine "yay " +++ scoreLine "haskell!"
