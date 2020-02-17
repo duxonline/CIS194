@@ -5,6 +5,7 @@ import qualified Week7.Lecture as L
 import qualified Week7.Sized as S
 import qualified Week7.Scrabble as B
 import qualified Week7.Buffer as F
+import Week7.Editor
 import           Data.Char
 
 data JoinList m a = Empty
@@ -71,18 +72,6 @@ takeJ _ _ = Empty
 createList :: JoinList S.Size Char
 createList = foldr1 (+++) $ Single (S.Size 1) <$> ['a'..'z']
 
-score :: Char -> B.Score
-score c
-  | c' `elem` "aeilnorstu" = B.Score 1
-  | c' `elem` "dg"         = B.Score 2
-  | c' `elem` "bcmp"       = B.Score 3
-  | c' `elem` "fhvwy"      = B.Score 4
-  | c' `elem` "k"          = B.Score 5
-  | c' `elem` "jx"         = B.Score 8
-  | c' `elem` "qz"         = B.Score 10
-  | otherwise              = B.Score 0
-    where c' = toLower c
-
 -- scoreString :: String -> B.Score
 -- scoreString = foldr ((+) . score) (B.Score 0)
 
@@ -90,7 +79,7 @@ score c
 -- scoreString xs = mconcat (score <$> xs)
 
 scoreString :: String -> B.Score
-scoreString xs = sum (score <$> xs)
+scoreString xs = sum (B.scoreChar <$> xs)
 
 scoreLine :: String -> JoinList B.Score String
 scoreLine xs = Single (scoreString xs) xs
@@ -107,9 +96,8 @@ instance F.Buffer (JoinList (B.Score, S.Size) String) where
     Nothing -> b
     Just _ -> takeJ n b +++ F.fromString s +++ takeJ (n + 1) b
 
-  numLines     = undefined
-  value        = undefined
-
+  numLines     = S.getSize . S.size . tag
+  value        = B.getScore . B.score . tag
 
 test1 = do
   print . L.getProduct . tag $ someJoinList
@@ -124,3 +112,5 @@ test2 = do
 
 test3 =
   print $ scoreLine "yay " +++ scoreLine "haskell!"
+
+test4 = runEditor editor $ (F.fromString "A\nChristmas\nCarol" :: JoinList (B.Score, S.Size) String)
