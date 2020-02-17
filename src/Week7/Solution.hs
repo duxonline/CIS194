@@ -1,8 +1,10 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Week7.Solution where
 
 import qualified Week7.Lecture as L
 import qualified Week7.Sized as S
 import qualified Week7.Scrabble as B
+import qualified Week7.Buffer as F
 import           Data.Char
 
 data JoinList m a = Empty
@@ -84,11 +86,30 @@ score c
 -- scoreString :: String -> B.Score
 -- scoreString = foldr ((+) . score) (B.Score 0)
 
+-- scoreString :: String -> B.Score
+-- scoreString xs = mconcat (score <$> xs)
+
 scoreString :: String -> B.Score
-scoreString xs = mconcat (score <$> xs)
+scoreString xs = sum (score <$> xs)
 
 scoreLine :: String -> JoinList B.Score String
 scoreLine xs = Single (scoreString xs) xs
+
+instance F.Buffer (JoinList (B.Score, S.Size) String) where
+  toString     = unlines . jlToList
+  fromString xs = foldr1 (+++) $ readLine <$> lines xs
+    where readLine x = Single (scoreString x, S.Size 1) x
+
+  line = indexJ
+
+  replaceLine n "" b = b
+  replaceLine n s b = case indexJ n b of
+    Nothing -> b
+    Just _ -> takeJ n b +++ F.fromString s +++ takeJ (n + 1) b
+
+  numLines     = undefined
+  value        = undefined
+
 
 test1 = do
   print . L.getProduct . tag $ someJoinList
