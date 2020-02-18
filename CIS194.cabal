@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ba7ee7d11a43e8f9fb512e98980ee703f5c32d7f7f94019b357cb4f8f132ea0b
+-- hash: 5243421e47ead74f31de5d6db0174e70b8cd393e4edd02272e2fd3f5e21064f0
 
 name:           CIS194
 version:        0.1.0.0
@@ -47,6 +47,7 @@ library
       Week7.Solution
       Week7.StringBufEditor
       Week7.StringBuffer
+      Week8.Employee
   other-modules:
       Paths_CIS194
   hs-source-dirs:
