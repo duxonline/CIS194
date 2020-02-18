@@ -14,3 +14,6 @@ testCompany = undefined
 
 data GuestList = GL [Employee] Fun
     deriving (Show, Eq)
+
+instance Ord GuestList where
+    compare (GL _ f1) (GL _ f2) = compare f1 f2
