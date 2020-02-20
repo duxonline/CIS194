@@ -58,6 +58,7 @@ test2 = do
 -- sum [sum [1,1],1]
 -- sum [2,1]
 -- 3
+
   print $ foldTree (\_ xs -> if null xs then 0 else 1 + maximum xs) tree
 -- f = (\_ xs -> if null xs then 0 else 1 + maximum xs)
 -- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
@@ -66,3 +67,32 @@ test2 = do
 -- f 1 [1, 0]
 -- 1 + max[1, 0]
 -- 2
+
+-- nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+-- nextLevel boss results = (withBoss, withoutBoss) where
+--     withoutBoss = mconcat (map (uncurry moreFun) results)
+--     withBoss = glCons boss (mconcat (map snd results))
+
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel boss results = (withBoss, withoutBoss)
+  where
+    withoutBoss = foldMap (uncurry moreFun) results
+    withBoss = glCons boss $ foldMap snd results
+
+test3 =
+  print $ nextLevel boss guestLists
+    where
+      boss = Emp "Joe" 5
+      guestLists = [(GL [Emp "Stan" 9] 9, GL [Emp "Bob" 3] 3)]
+
+maxFun :: Tree Employee -> GuestList
+maxFun = uncurry moreFun . treeFold nextLevel
+
+test4 = print $ maxFun testCompany
+
+formatGL :: GuestList -> String
+formatGL (GL lst fun) = "Total fun: " ++ show fun ++ "\n" ++ unlines (empName <$> lst)
+
+test5 = readFile "company.txt" >>= computeGuestList >>= putStr
+  where
+    computeGuestList = return . formatGL . maxFun . read
