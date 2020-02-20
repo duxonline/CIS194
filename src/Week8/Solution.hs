@@ -46,4 +46,34 @@ test2 = do
 
   print $ foldTree (\x xs -> maximum (x:xs)) tree
   print $ foldTree (\_ xs -> if null xs then 1 else sum xs) tree
+
+-- f = (\_ xs -> if null xs then 1 else sum xs)
+-- x = 1
+-- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
+-- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
+-- f 1 [treeFold f Node 2 [Node 3 [], Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 (fmap (treeFold f) [Node 3 [], Node 4 []]), treeFold f Node 5 []]
+-- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
+-- f 1 [f 2 [1, 1],1]
+-- f 1 [sum [1,1],1]
+-- sum [sum [1,1],1]
+-- sum [2,1]
+-- 3
   print $ foldTree (\_ xs -> if null xs then 0 else 1 + maximum xs) tree
+
+-- f = (\_ xs -> if null xs then 0 else 1 + maximum xs)
+-- x = 1
+-- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
+-- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
+-- f 1 [treeFold f Node 2 [Node 3 [], Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 (fmap (treeFold f) [Node 3 [], Node 4 []]), treeFold f Node 5 []]
+-- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
+-- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
+-- f 1 [f 2 [0, 0], 0]
+-- f 1 [1 + max[0, 0], 0]
+-- f 1 [1, 0]
+-- 1 + max[1, 0]
+-- 2
