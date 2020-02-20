@@ -30,24 +30,7 @@ test2 = do
   let tree = Node 1 [Node 2 [Node 3 [], Node 4 []], Node 5 []]
 
   print $ foldTree (\x xs -> sum (x:xs)) tree
-
 -- f = (\x xs -> sum (x:xs))
--- x = 1
--- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
--- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
--- (\x xs -> sum (x:xs)) 1 (fmap (treeFold (\x xs -> sum (x:xs)) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
--- sum [1:(fmap (treeFold (\x xs -> sum (x:xs))) [Node 2 [Node 3 [], Node 4 []], Node 5 []])]
--- sum [1:[treeFold f [Node 2 [Node 3 [], Node 4 []], treeFold Node 5 []]]
--- sum [1:[treeFold f [Node 2 [Node 3 [], Node 4 []], sum[5:[]]]]
--- sum [1:[sum[2:(fmap treeFold f [Node 3 [], Node 4 []]), sum[5:[]]]]
--- sum [1:[sum[2:[treeFold f [Node 3 [], treeFold f Node 4 []], sum[5:[]]]]
--- sum [1:[sum[2:[sum[3:[]], sum[4:[]]], sum[5:[]]]]
--- sum [1, 2, 3, 4, 5]
-
-  print $ foldTree (\x xs -> maximum (x:xs)) tree
-  print $ foldTree (\_ xs -> if null xs then 1 else sum xs) tree
-
--- f = (\_ xs -> if null xs then 1 else sum xs)
 -- x = 1
 -- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
 -- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
@@ -56,21 +39,27 @@ test2 = do
 -- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
 -- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
 -- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
+-- f 1 [f 2 [3, 4], 5]
+-- f 1 [9, 5]
+-- 15
+
+  print $ foldTree (\x xs -> maximum (x:xs)) tree
+-- f = (\x xs -> maximum (x:xs))
+-- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
+-- f 1 [f 2 [3, 4], f 5 []]
+-- f 1 [4, 5]
+-- 5
+
+  print $ foldTree (\_ xs -> if null xs then 1 else sum xs) tree
+-- f = (\_ xs -> if null xs then 1 else sum xs)
+-- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
 -- f 1 [f 2 [1, 1],1]
 -- f 1 [sum [1,1],1]
 -- sum [sum [1,1],1]
 -- sum [2,1]
 -- 3
   print $ foldTree (\_ xs -> if null xs then 0 else 1 + maximum xs) tree
-
 -- f = (\_ xs -> if null xs then 0 else 1 + maximum xs)
--- x = 1
--- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
--- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
--- f 1 [treeFold f Node 2 [Node 3 [], Node 4 []], treeFold f Node 5 []]
--- f 1 [f 2 (fmap (treeFold f) [Node 3 [], Node 4 []]), treeFold f Node 5 []]
--- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
--- f 1 [f 2 [treeFold f Node 3 [], treeFold f Node 4 []], treeFold f Node 5 []]
 -- f 1 [f 2 [f 3 [], f 4 []], f 5 []]
 -- f 1 [f 2 [0, 0], 0]
 -- f 1 [1 + max[0, 0], 0]
