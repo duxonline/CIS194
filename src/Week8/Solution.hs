@@ -1,12 +1,13 @@
 module Week8.Solution where
 
 import Week8.Employee
+import Data.Tree
 
 glCons :: Employee -> GuestList -> GuestList
 glCons emp (GL emps funs) = GL (emp:emps) (empFun emp + funs)
 
 instance Semigroup GuestList where
-    (<>) (GL e1 f1) (GL e2 f2) = GL (e1 ++ e2) (f1 +f2) 
+    (<>) (GL e1 f1) (GL e2 f2) = GL (e1 ++ e2) (f1 +f2)
 
 instance Monoid GuestList where
     mempty = GL [] 0
@@ -21,3 +22,28 @@ test1 = do
     where
       e = Emp "Sharon" 60
       gl = GL [Emp "Frank" 47, Emp "Mary" 15 ] 62
+
+treeFold :: (a -> [b] -> b) -> Tree a -> b
+treeFold f (Node x xs) = f x (fmap (treeFold f) xs)
+
+test2 = do
+  let tree = Node 1 [Node 2 [Node 3 [], Node 4 []], Node 5 []]
+
+  print $ foldTree (\x xs -> sum (x:xs)) tree
+
+-- f = (\x xs -> sum (x:xs))
+-- x = 1
+-- xs = [Node 2 [Node 3 [], Node 4 []], Node 5 []]
+-- f 1 (fmap (treeFold f) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
+-- (\x xs -> sum (x:xs)) 1 (fmap (treeFold (\x xs -> sum (x:xs)) [Node 2 [Node 3 [], Node 4 []], Node 5 []])
+-- sum [1:(fmap (treeFold (\x xs -> sum (x:xs))) [Node 2 [Node 3 [], Node 4 []], Node 5 []])]
+-- sum [1:[treeFold f [Node 2 [Node 3 [], Node 4 []], treeFold Node 5 []]]
+-- sum [1:[treeFold f [Node 2 [Node 3 [], Node 4 []], sum[5:[]]]]
+-- sum [1:[sum[2:(fmap treeFold f [Node 3 [], Node 4 []]), sum[5:[]]]]
+-- sum [1:[sum[2:[treeFold f [Node 3 [], treeFold f Node 4 []], sum[5:[]]]]
+-- sum [1:[sum[2:[sum[3:[]], sum[4:[]]], sum[5:[]]]]
+-- sum [1, 2, 3, 4, 5]
+
+  print $ foldTree (\x xs -> maximum (x:xs)) tree
+  print $ foldTree (\_ xs -> if null xs then 1 else sum xs) tree
+  print $ foldTree (\_ xs -> if null xs then 0 else 1 + maximum xs) tree
