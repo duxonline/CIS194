@@ -68,13 +68,13 @@ test2 = do
 -- 1 + max[1, 0]
 -- 2
 
--- nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
--- nextLevel boss results = (withBoss, withoutBoss) where
---     withoutBoss = mconcat (map (uncurry moreFun) results)
---     withBoss = glCons boss (mconcat (map snd results))
-
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel boss results = (withBoss, withoutBoss)
+nextLevel boss results = (withBoss, withoutBoss) where
+    withoutBoss = mconcat (map (uncurry moreFun) results)
+    withBoss = glCons boss (mconcat (map snd results))
+
+nextLevel2 :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel2 boss results = (withBoss, withoutBoss)
   where
     withoutBoss = foldMap (uncurry moreFun) results
     withBoss = glCons boss $ foldMap snd results
@@ -93,6 +93,6 @@ test4 = print $ maxFun testCompany
 formatGL :: GuestList -> String
 formatGL (GL lst fun) = "Total fun: " ++ show fun ++ "\n" ++ unlines (empName <$> lst)
 
-test5 = readFile "company.txt" >>= computeGuestList >>= putStr
+test5 = readFile "src/Week8/company.txt" >>= computeGuestList >>= putStr
   where
     computeGuestList = return . formatGL . maxFun . read
