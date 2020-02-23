@@ -28,7 +28,6 @@ treeFold f (Node x xs) = f x (fmap (treeFold f) xs)
 
 test2 = do
   let tree = Node 1 [Node 2 [Node 3 [], Node 4 []], Node 5 []]
-
   print $ foldTree (\x xs -> sum (x:xs)) tree
 -- f = (\x xs -> sum (x:xs))
 -- x = 1
