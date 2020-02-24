@@ -12,3 +12,6 @@ satisfy p = Parser f
 
 char :: Char -> Parser Char
 char c = satisfy (== c)
+
+first :: (a -> b) -> (a,c) -> (b,c)
+first = undefined
