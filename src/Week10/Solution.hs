@@ -35,6 +35,7 @@ instance Functor Parser where
 test1 = do
   print $ first toLower ('A', "BC")
   print $ runParser (satisfy isUpper) "ABC"
+  print $ runParser (satisfy isUpper) "aBC"
   print $ runParser (toLower <$> satisfy isUpper) "ABC"
 
 instance Applicative Parser where
