@@ -63,6 +63,8 @@ type Name = String
 data Employee = Emp {name :: Name, phone :: String}
     deriving(Show)
 
+-- <$> :: (Name -> String -> Employee) -> Parser Name -> Parser (String -> Employee)
+-- <*> :: Parser (String -> Employee) -> Parser String -> Parser Employee
 parseEmployee :: Parser Employee
 parseEmployee = Emp <$> parseName <*> parsePhone
     where
