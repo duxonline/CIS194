@@ -38,6 +38,21 @@ test1 = do
   print $ runParser (satisfy isUpper) "aBC"
   print $ runParser (toLower <$> satisfy isUpper) "ABC"
 
+-- <*>      :: f (a -> b) -> f a -> f b
+-- <*>      :: Parser (a -> b) -> Parser a -> Parser b
+-- xs       :: String
+-- f        :: String -> Maybe (a -> b, String)
+-- f xs     :: Maybe (a -> b, String)
+-- h        :: (a -> b, String) -> Maybe (b, String)
+-- p        :: a -> b
+-- first    :: (a -> b) -> (a, String) -> (b, String)
+-- first p  :: (a, String) -> (b, String)
+-- ys       :: String
+-- g        :: String -> Maybe (a, String)
+-- g ys     :: Maybe (a, String)
+-- <$>      :: ((a, String) -> (b, String)) -> Maybe (a, String) -> Maybe (b, String)
+-- >>=      :: Maybe (a -> b, String) -> ((a -> b, String) -> Maybe (b, String)) -> Maybe (b, String)
+-- >>=      :: m a -> (a -> m b) -> m b
 instance Applicative Parser where
     pure a = Parser $ \xs -> Just (a, xs)
     Parser f <*> Parser g = Parser $ \xs -> f xs >>= h
@@ -48,6 +63,7 @@ type Name = String
 data Employee = Emp {name :: Name, phone :: String}
     deriving(Show)
 
+parseEmployee :: Parser Employee
 parseEmployee = Emp <$> parseName <*> parsePhone
     where
         parsePhone = show <$> posInt
