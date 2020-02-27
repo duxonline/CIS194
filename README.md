@@ -15,3 +15,10 @@ Week 6: Lazy evaluation
 Week 7: Folds and monoids
 
 Week 8: IO
+
+Week 9: Functors
+
+Week 10: Applicative functors
+
+
+
