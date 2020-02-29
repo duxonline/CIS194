@@ -20,9 +20,9 @@ char c = satisfy (== c)
 
 posInt :: Parser Integer
 posInt = Parser f
-    where 
+    where
         f xs
-            | null ns = Nothing 
+            | null ns = Nothing
             | otherwise  = Just (read ns, rest)
             where (ns, rest) = span isDigit xs
 
@@ -43,7 +43,7 @@ test1 = do
 -- xs       :: String
 -- f        :: String -> Maybe (a -> b, String)
 -- f xs     :: Maybe (a -> b, String)
--- h        :: (a -> b, String) -> Maybe (b, String)
+-- k        :: (a -> b, String) -> Maybe (b, String)
 -- p        :: a -> b
 -- first    :: (a -> b) -> (a, String) -> (b, String)
 -- first p  :: (a, String) -> (b, String)
@@ -55,9 +55,10 @@ test1 = do
 -- >>=      :: m a -> (a -> m b) -> m b
 instance Applicative Parser where
     pure a = Parser $ \xs -> Just (a, xs)
-    Parser f <*> Parser g = Parser $ \xs -> f xs >>= h
+    Parser f <*> Parser g = Parser h
         where
-        h (p, ys) = first p <$> g ys
+        h s = f s >>= k
+        k (p, ys) = first p <$> g ys
 
 type Name = String
 data Employee = Emp {name :: Name, phone :: String}
