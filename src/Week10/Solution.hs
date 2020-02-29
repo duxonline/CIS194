@@ -29,8 +29,16 @@ posInt = Parser f
 first :: (a -> b) -> (a,c) -> (b,c)
 first f (a ,b) = (f a, b)
 
+-- f                    :: a -> b
+-- first                :: (a -> b) -> (a, String) -> (b, String)
+-- first f              :: (a, String) -> (b, String)
+-- fmap                 :: ((a, String) -> (b, String)) -> Maybe (a, String) -> Maybe (b, String)
+-- fmap (first f)       :: Maybe (a, String) -> Maybe (b, String)
+-- p                    :: String -> Maybe (a, String)
+-- fmap (first f) . p   :: String -> Maybe (b, String)
 instance Functor Parser where
-    fmap f (Parser p) = Parser $ fmap (first f) . p
+    fmap f (Parser p) = Parser g
+        where g = fmap (first f) . p
 
 test1 = do
   print $ first toLower ('A', "BC")
