@@ -89,3 +89,11 @@ test2 = do
   print $ runParser parseEmployee "John Moe, 2564213"
   print $ runParser parseEmployee "Melissa13"
   print $ runParser (Emp <$> pure "Jessica" <*> show <$> posInt) "8675309"
+
+
+abParser :: Parser (Char, Char)
+abParser = undefined 
+
+
+abParser_ :: Parser ()
+abParser_ = undefined
