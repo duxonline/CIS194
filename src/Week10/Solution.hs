@@ -50,7 +50,7 @@ test1 = do
 -- <*>      :: Parser (a -> b) -> Parser a -> Parser b
 -- xs       :: String
 -- f        :: String -> Maybe (a -> b, String)
--- f xs     :: Maybe (a -> b, String)
+-- f s      :: Maybe (a -> b, String)
 -- k        :: (a -> b, String) -> Maybe (b, String)
 -- p        :: a -> b
 -- first    :: (a -> b) -> (a, String) -> (b, String)
@@ -95,7 +95,7 @@ test2 = do
 -- (,) <$> char 'a' :: Parser (b -> (Char, b))
 -- (,) <$> char 'a' <*> char 'b' :: Parser (Char, Char)
 abParser :: Parser (Char, Char)
-abParser = (,) <$> char 'a' <*> char 'b' 
+abParser = (,) <$> char 'a' <*> char 'b'
 
 -- const                    :: a -> b -> a
 -- const ()                 :: b -> ()
@@ -105,3 +105,8 @@ abParser = (,) <$> char 'a' <*> char 'b'
 -- const () <$> abParser    :: Parser ()
 abParser_ :: Parser ()
 abParser_ = const () <$> abParser
+-- abParser_ = () <$ abParser
+
+
+intPair :: Parser [Integer]
+intPair = (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt
