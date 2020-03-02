@@ -16,7 +16,7 @@ satisfy p = Parser f
             | otherwise = Nothing
 
 char :: Char -> Parser Char
-char c = satisfy (== c)
+char c = satisfy (==c)
 
 posInt :: Parser Integer
 posInt = Parser f
@@ -90,10 +90,18 @@ test2 = do
   print $ runParser parseEmployee "Melissa13"
   print $ runParser (Emp <$> pure "Jessica" <*> show <$> posInt) "8675309"
 
-
+-- (,) :: a -> b -> (a, b)
+-- char 'a' :: Parser Char
+-- (,) <$> char 'a' :: Parser (b -> (Char, b))
+-- (,) <$> char 'a' <*> char 'b' :: Parser (Char, Char)
 abParser :: Parser (Char, Char)
-abParser = undefined 
+abParser = (,) <$> char 'a' <*> char 'b' 
 
-
+-- const                    :: a -> b -> a
+-- const ()                 :: b -> ()
+-- abParser                 :: Parser (Char, Char)
+-- <$>                      :: Functor f => (a -> b) -> f a -> f b
+-- <$>                      :: ((Char, Char) -> ()) -> Parser (Char, Char) -> Parser ()
+-- const () <$> abParser    :: Parser ()
 abParser_ :: Parser ()
-abParser_ = undefined
+abParser_ = const () <$> abParser
