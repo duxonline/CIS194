@@ -107,6 +107,8 @@ abParser_ :: Parser ()
 abParser_ = const () <$> abParser
 -- abParser_ = () <$ abParser
 
-
 intPair :: Parser [Integer]
 intPair = (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt
+
+test3 =
+    print $ runParser intPair "23 34"
