@@ -20,5 +20,8 @@ Week 9: Functors
 
 Week 10: Applicative functors
 
+Week 11: Applicative functors (part 2)
+
+Week 12: Monads
 
 
