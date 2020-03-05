@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Week10.Solution
 
 main :: IO ()
-main = someFunc
+main = test3
