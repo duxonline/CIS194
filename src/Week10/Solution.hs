@@ -107,8 +107,14 @@ abParser_ :: Parser ()
 abParser_ = const () <$> abParser
 -- abParser_ = () <$ abParser
 
+-- (\a _ b -> [a,b]) :: a -> p -> a -> [a]
+-- (\a _ b -> [a,b]) <$> posInt :: Parser (p -> Integer -> [Integer])
+-- (\a _ b -> [a,b]) <$> posInt <*> char ' ' :: Parser (Integer -> [Integer])
+-- (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt :: Parser [Integer]
 intPair :: Parser [Integer]
 intPair = (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt
 
-test3 =
-    print $ runParser intPair "23 34"
+test3 = do
+  print $ runParser posInt "23"
+  print $ runParser (char 'a') "a23"
+  print $ runParser intPair "23 34"
