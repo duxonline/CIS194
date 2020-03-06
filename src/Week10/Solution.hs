@@ -122,8 +122,8 @@ test3 = do
 -- runParser intPair "23 34"
 -- runParser (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt "23 34"
 -- runParser (fmap f posInt) <*> char ' ' <*> posInt "23 34"
--- f = (\a _ b -> [a,b])
 -- f :: a -> (p -> b -> [a, b])
+-- f = (\a _ b -> [a,b])
 -- runParser (fmap f (Parser p)) <*> char ' ' <*> posInt "23 34"
 -- p :: String -> Maybe (Integer, String)
 -- p xs
