@@ -135,3 +135,7 @@ test3 = do
 -- f' = fmap (first f) . p 
 -- runParser Parser f' <*> Parser g' <*> posInt "23 34"
 -- g' :: String -> Maybe (Char, String)
+-- g' [] = Nothing
+-- g' (x:xs)
+--     | (==' ') x = Just (x, xs)
+--     | otherwise = Nothing
