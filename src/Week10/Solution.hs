@@ -118,3 +118,20 @@ test3 = do
   print $ runParser posInt "23"
   print $ runParser (char 'a') "a23"
   print $ runParser intPair "23 34"
+
+-- runParser intPair "23 34"
+-- runParser (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt "23 34"
+-- runParser (fmap f posInt) <*> char ' ' <*> posInt "23 34"
+-- f = (\a _ b -> [a,b])
+-- f :: a -> (p -> b -> [a, b])
+-- runParser (fmap f (Parser p)) <*> char ' ' <*> posInt "23 34"
+-- p :: String -> Maybe (Integer, String)
+-- p xs
+--     | null ns = Nothing
+--     | otherwise  = Just (read ns, rest)
+--     where (ns, rest) = span isDigit xs
+
+-- runParser Parser f' <*> char ' ' <*> posInt "23 34"
+-- f' = fmap (first f) . p 
+-- runParser Parser f' <*> Parser g' <*> posInt "23 34"
+-- g' :: String -> Maybe (Char, String)
