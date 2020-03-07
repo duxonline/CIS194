@@ -4,14 +4,14 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f5dd4724920204f769c65b0b70f8f606656824e6540a81cd3cf101e51eba532f
+-- hash: 07e089f98f2fc05151df59d9c4e021d8229706f81ec5bb78f4d4d7f80d4b91c7
 
 name:           CIS194
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/CIS194#readme>
-homepage:       https://github.com/githubuser/CIS194#readme
-bug-reports:    https://github.com/githubuser/CIS194/issues
-author:         Author name here
+homepage:       https://github.com/frankwang0/CIS194#readme
+bug-reports:    https://github.com/frankwang0/CIS194/issues
+author:         Frank Wang
 maintainer:     example@example.com
 copyright:      2020 Author name here
 license:        BSD3
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/CIS194
+  location: https://github.com/frankwang0/CIS194
 
 library
   exposed-modules:

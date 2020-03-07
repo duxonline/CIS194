@@ -107,12 +107,18 @@ abParser_ :: Parser ()
 abParser_ = const () <$> abParser
 -- abParser_ = () <$ abParser
 
+merge :: Integer -> Char -> Integer -> [Integer]
+merge a p b = 
+    case p of
+        ' ' -> [a,0,b]
+        _   -> [a,b]
+
 -- (\a _ b -> [a,b]) :: a -> p -> a -> [a]
 -- (\a _ b -> [a,b]) <$> posInt :: Parser (p -> Integer -> [Integer])
 -- (\a _ b -> [a,b]) <$> posInt <*> char ' ' :: Parser (Integer -> [Integer])
 -- (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt :: Parser [Integer]
 intPair :: Parser [Integer]
-intPair = (\a _ b -> [a,b]) <$> posInt <*> char ' ' <*> posInt
+intPair = merge <$> posInt <*> char ' ' <*> posInt
 
 test3 = do
   print $ runParser posInt "23"
