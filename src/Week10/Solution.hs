@@ -156,3 +156,12 @@ test4 = do
     print $ runParser (char 'a' <|> char 'b') "ab"
     print $ runParser (char 'b' <|> char 'a') "ba"
     print $ runParser (char 'b' <|> char 'z') "ab"
+
+intOrUppercase :: Parser ()
+intOrUppercase = (const () <$> posInt) <|> (const () <$> satisfy isUpper)
+-- intOrUppercase = (() <$ posInt) <|> (() <$ satisfy isUpper)
+
+test5 = do
+    print $ runParser intOrUppercase "123abc"
+    print $ runParser intOrUppercase "AZyz"
+    print $ runParser intOrUppercase "abcd"
