@@ -108,7 +108,7 @@ abParser_ = const () <$> abParser
 -- abParser_ = () <$ abParser
 
 merge :: Integer -> Char -> Integer -> [Integer]
-merge a p b = 
+merge a p b =
     case p of
         ' ' -> [a,0,b]
         _   -> [a,b]
@@ -121,8 +121,8 @@ intPair :: Parser [Integer]
 intPair = merge <$> posInt <*> char ' ' <*> posInt
 
 test3 = do
-  print $ runParser posInt "23"
-  print $ runParser (char 'a') "a23"
+--   print $ runParser posInt "23"
+--   print $ runParser (char 'a') "a23"
   print $ runParser intPair "23 34"
 
 -- runParser intPair "23 34"
@@ -145,3 +145,14 @@ test3 = do
 -- g' (x:xs)
 --     | (==' ') x = Just (x, xs)
 --     | otherwise = Nothing
+
+instance Alternative Parser where
+    empty = Parser (const Nothing)
+    (<|>) f g  = Parser h
+        where
+            h xs = runParser f xs <|> runParser g xs
+
+test4 = do
+    print $ runParser (char 'a' <|> char 'b') "ab"
+    print $ runParser (char 'b' <|> char 'a') "ba"
+    print $ runParser (char 'b' <|> char 'z') "ab"
