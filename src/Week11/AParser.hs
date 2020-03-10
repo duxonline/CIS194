@@ -1,4 +1,4 @@
-module Week11.Aparser (Parser, runParser, satisfy, char, posInt) where
+module Week11.AParser (Parser, runParser, satisfy, char, posInt) where
 
 import           Control.Applicative
 import           Data.Char

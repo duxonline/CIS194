@@ -1,14 +1,14 @@
 module Week11.Solution where
 
-import  Week11.Aparser
+import  Week11.AParser
 import  Data.Char
+import Control.Applicative
 
 zeroOrMore :: Parser a -> Parser [a]
-zeroOrMore = undefined 
-
+zeroOrMore p = oneOrMore p <|> pure [] 
 
 oneOrMore :: Parser a -> Parser [a]
-oneOrMore = undefined
+oneOrMore p = (:) <$> p <*> zeroOrMore p
 
 test1 = do
     print $ runParser (zeroOrMore (satisfy isUpper)) "ABCdEfgH"
