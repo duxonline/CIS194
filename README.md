@@ -18,9 +18,9 @@ Week 8: IO
 
 Week 9: Functors
 
-Week 10: Applicative functors
+Week 10: Applicative functors part 1
 
-Week 11: Applicative functors (part 2)
+Week 11: Applicative functors part 2
 
 Week 12: Monads
 
