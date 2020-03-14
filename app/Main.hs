@@ -1,6 +1,6 @@
 module Main where
 
-import Week10.Solution
+import Week11.Solution2
 
 main :: IO ()
-main = test3
+main = testParser
