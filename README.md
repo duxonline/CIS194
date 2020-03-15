@@ -22,6 +22,4 @@ Week 10: Applicative functors part 1
 
 Week 11: Applicative functors part 2
 
-Week 12: Monads
-
-I will supplement this course with Programming in Haskell book
+Week 12: Monad
