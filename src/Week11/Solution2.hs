@@ -1,3 +1,5 @@
+-- Sample code from Programming in Haskell
+
 module Week11.Solution2 where
     
 import Control.Applicative
