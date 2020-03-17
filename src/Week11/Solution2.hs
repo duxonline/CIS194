@@ -21,7 +21,10 @@ instance Applicative Parser where
                         [(g, out)] -> parse (fmap g px) out)
 
 instance Monad Parser where
+  -- return :: a -> Parser a
   return v = P (\input -> [(v,input)])
+  
+  -- >>= :: Parser a -> (a -> Parser b) -> Parser b
   p >>= f = P (\input -> case parse p input of
                         [] -> []
                         [(v, out)] -> parse (f v) out)
@@ -59,10 +62,32 @@ three =
 
 string :: String -> Parser String
 string [] = return []
-string (x:xs) = do  char x
-                    string xs
-                    return (x:xs)
+string (x:xs) = 
+  char x    >>= \_ ->
+  string xs >>= \_ -> 
+            return (x:xs)
+-- string (x:xs) = do  char x
+--                     string xs
+--                     return (x:xs)
+
+
+-- string "abc" => satisfy (=='a') >= \_ ->
+--                 string "bc" >= \_ -> return (x:xs)
+
+-- p = satisfy (=='a') => P (\input -> parse (return v) out) 
+--                     => P("abcdef" -> parse (return 'a') "bcdef")
+-- f = \_ -> string "bc" >= \_ -> return (x:xs)
+-- p >= f = P (\input -> parse (f v) out) 
+--        =>P (\"abcdef" -> parse (f 'a') 'bcdef') 
+
+
+-- string "bc" => satisfy (=='b') >= \_ ->
+--                 string "c" >= \_ -> return (x:xs)
+
+-- string "c" => satisfy (=='c') >= \_ ->
+--                 string "" >= \_ -> return (x:xs)
+
 
 main = do
-  print $ parse three "abcedfg"
-  print $ parse (string "abc") "abcdef9"
+  print $ parse three "abcedf"
+  print $ parse (string "abc") "abcdef"
