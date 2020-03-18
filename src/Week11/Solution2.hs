@@ -49,45 +49,58 @@ char :: Char -> Parser Char
 char x = satisfy (==x)
 
 three :: Parser (Char, Char)
--- three = do 
---         x <- item
---         item
---         z <- item
---         return (x, z)
-three = 
-  item >>= \x ->
-  item >>= \_ ->
-  item >>= \z ->
-          return (x,z)
+three = do 
+        x <- item
+        item
+        z <- item
+        return (x, z)
+-- three = 
+--   item >>= \x ->
+--   item >>= \_ ->
+--   item >>= \z ->
+--           return (x,z)
 
 string :: String -> Parser String
 string [] = return []
-string (x:xs) = 
-  char x    >>= \_ ->
-  string xs >>= \_ -> 
-            return (x:xs)
--- string (x:xs) = do  char x
---                     string xs
---                     return (x:xs)
-
+string (x:xs) = do  
+                char x
+                string xs
+                return (x:xs)
+-- string (x:xs) = 
+--   char x    >>= \_ ->
+--   string xs >>= \_ -> 
+--             return (x:xs)
 
 -- string "abc" => satisfy (=='a') >= \_ ->
 --                 string "bc" >= \_ -> return (x:xs)
-
--- p = satisfy (=='a') => P (\input -> parse (return v) out) 
---                     => P("abcdef" -> parse (return 'a') "bcdef")
--- f = \_ -> string "bc" >= \_ -> return (x:xs)
+-- p = satisfy (=='a') => P (\input -> parse (return v) out)
+--                     => P ("abcdef" -> parse (return 'a') "bcdef")
+-- f = \_ -> string "bc" >= \_ -> return ('a':"bc")
 -- p >= f = P (\input -> parse (f v) out) 
---        =>P (\"abcdef" -> parse (f 'a') 'bcdef') 
-
+--        =>P (\"abcdef" -> parse (f 'a') "bcdef") 
+--        =>P (\"abcdef" -> parse (string "bc" >= \_ -> return ('a':"bc")) "bcdef") 
 
 -- string "bc" => satisfy (=='b') >= \_ ->
---                 string "c" >= \_ -> return (x:xs)
+--                string "c" >= \_ -> return (x:xs)
+-- p = satisfy (=='b') => P (\input -> parse (return v) out) 
+--                     => P ("bcdef" -> parse (return 'b') "cdef")
+-- f = \_ -> string "c" >= \_ -> return ('b':"c")
+-- p >= f = P (\input -> parse (f v) out) 
+--        =>P (\"bcdef" -> parse (f 'b') "cdef") 
+--        =>P (\"bcdef" -> parse (string "c" >= \_ -> return ('b':"c")) "cdef") 
 
 -- string "c" => satisfy (=='c') >= \_ ->
---                 string "" >= \_ -> return (x:xs)
-
+--               string "" >= \_ -> return (x:xs)
+-- p = satisfy (=='c') => P (\input -> parse (return v) out) 
+--                     => P ("cdef" -> parse (return 'c') "def")
+-- f = \_ -> string "" >= \_ -> return ('c':"")
+-- p >= f = P (\input -> parse (f v) out) 
+--        =>P (\"cdef" -> parse (f 'c') "def") 
+--        =>P (\"cdef" -> parse (string "" >= \_ -> return ('c':"")) "def")
+--        =>P (\"cdef" -> parse (return [] >= \_ -> return ('c':"")) "def")
+--        =>P (\"cdef" -> parse (return []) "def")
 
 main = do
   print $ parse three "abcedf"
   print $ parse (string "abc") "abcdef"
+  print $ parse (return []::Parser String) "def"
