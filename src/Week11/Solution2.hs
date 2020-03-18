@@ -76,7 +76,7 @@ string (x:xs) = do
 -- p = satisfy (=='a') => P (\input -> parse (return v) out)
 --                     => P ("abcdef" -> parse (return 'a') "bcdef")
 -- f = \_ -> string "bc" >= \_ -> return ('a':"bc")
--- p >= f = P (\input -> parse (f v) out) 
+-- p >= f = P (\input    -> parse (f v) out) 
 --        =>P (\"abcdef" -> parse (f 'a') "bcdef") 
 --        =>P (\"abcdef" -> parse (string "bc" >= \_ -> return ('a':"bc")) "bcdef") 
 
@@ -85,7 +85,7 @@ string (x:xs) = do
 -- p = satisfy (=='b') => P (\input -> parse (return v) out) 
 --                     => P ("bcdef" -> parse (return 'b') "cdef")
 -- f = \_ -> string "c" >= \_ -> return ('b':"c")
--- p >= f = P (\input -> parse (f v) out) 
+-- p >= f = P (\input   -> parse (f v) out) 
 --        =>P (\"bcdef" -> parse (f 'b') "cdef") 
 --        =>P (\"bcdef" -> parse (string "c" >= \_ -> return ('b':"c")) "cdef") 
 
@@ -94,7 +94,7 @@ string (x:xs) = do
 -- p = satisfy (=='c') => P (\input -> parse (return v) out) 
 --                     => P ("cdef" -> parse (return 'c') "def")
 -- f = \_ -> string "" >= \_ -> return ('c':"")
--- p >= f = P (\input -> parse (f v) out) 
+-- p >= f = P (\input  -> parse (f v) out) 
 --        =>P (\"cdef" -> parse (f 'c') "def") 
 --        =>P (\"cdef" -> parse (string "" >= \_ -> return ('c':"")) "def")
 --        =>P (\"cdef" -> parse (return [] >= \_ -> return ('c':"")) "def")
