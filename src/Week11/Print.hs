@@ -1,5 +1,4 @@
 newtype Parser a = P (String -> [(a, String)])
-
 parse :: Parser a -> String -> [(a, String)]
 parse (P p) intput = p intput
 
@@ -12,7 +11,6 @@ instance Applicative Parser where
 instance Monad Parser where
   -- return :: a -> Parser a
   return v = P (\input -> [(v,input)])
-  
   -- >>= :: Parser a -> (a -> Parser b) -> Parser b
   p >>= f = P (\input -> case parse p input of
                         [] -> []
