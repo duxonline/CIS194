@@ -7,7 +7,6 @@ instance Applicative Parser where
   pg <*> px = P (\input -> case parse pg input of
                         [] -> []
                         [(g, out)] -> parse (fmap g px) out)
-
 instance Monad Parser where
   -- return :: a -> Parser a
   return v = P (\input -> [(v,input)])
@@ -24,7 +23,6 @@ satisfy :: (Char -> Bool) -> Parser Char
 satisfy p = do 
               x <- item
               if p x then return x else empty
-
 char :: Char -> Parser Char
 char x = satisfy (==x)
 
