@@ -58,8 +58,8 @@ one  = g <$> item
 -- g :: Char -> (Char -> (Char, Char))
 -- g' = g 'a' = Char -> ('a', Char)
 -- pg = (g <$> item) => P(\input -> [(g v, out)])
---                    => P(\"abcde" -> [(g 'a', "bcde")])
---                    => P(\"abcde" -> [(g', "bcde")])
+--                   => P(\"abcde" -> [(g 'a', "bcde")])
+--                   => P(\"abcde" -> [(g', "bcde")])
 -- pg <*> item => pg <*> px => P(\input -> parse (fmap g' item) out)
 --                          => P(\"abcde" -> P(\"bcde" -> [(g 'b', "cde")]))
 --                          => P(\"abcde" -> P(\"bcde" -> [('a','b'), "cde")]))
@@ -79,17 +79,38 @@ three' =  pure g <*> item <*> item <*> item
 -- three2 =  g <$> item <*> item <*> item
 --           where g x y z = (x, z)
 
+-- p = item
+-- f = \x -> item >>= \_ -> item >>= \z -> return (x,z)
+-- p >>= f = P(\input -> [(x,xs)] >> f
+-- = P(\input -> parse (f 'a') out) 
+-- = P(\"abcdef" -> parse (item >>= \_ -> item >>= \z -> return ('a', z)) out)
+-- = P(\"abcdef" -> parse (item >>= \_ -> item >>= \z -> return ('a', z)) "bcdef")
+
+-- p' = item = P(\input -> [(x,xs)]) = P(\"bcdef" -> [('b',"cdef")])
+-- f' = \_ -> item >>= \z -> return ('a',z)
+-- p' >= f' = P(\input -> parse (f v) out) 
+--          = P(\"bcdef" -> parse(f 'b') "cdef")
+--          = P(\"bcdef" -> parse(item >>= \z -> return ('a',z)) "cdef")
+
+-- p'' = item = P(\input -> [(x,xs)]) = P(\"cdef" -> [('c',"def")])
+-- f'' = \z -> return ('a',z)
+-- p'' >= f'' = P(\input -> parse (f v) out)
+--            = P(\"cdef" -> parse(f 'c') "def")
+--            = P(\"cdef" -> parse(return ('a','c')) "def")
+--            = P(\"cdef" -> parse(P(\input -> [(('a','c'), input)]) "def")
+--            = [(('a','c'), "def")]
+
 three :: Parser (Char, Char)
-three = do
-        x <- item
-        item
-        z <- item
-        return (x, z)
--- three = 
---   item >>= \x ->
---   item >>= \_ ->
---   item >>= \z ->
---           return (x,z)
+three = 
+  item >>= \x ->
+  item >>= \_ ->
+  item >>= \z ->
+          return (x,z)
+-- three = do
+--         x <- item
+--         item
+--         z <- item
+--         return (x, z)          
 
 string :: String -> Parser String
 string [] = return []
