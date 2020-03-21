@@ -1,7 +1,7 @@
 -- Sample code from Programming in Haskell
 
 module Week11.Solution2 where
-    
+
 import Control.Applicative
 
 newtype Parser a = P (String -> [(a, String)])
@@ -23,7 +23,7 @@ instance Applicative Parser where
 instance Monad Parser where
   -- return :: a -> Parser a
   return v = P (\input -> [(v,input)])
-  
+
   -- >>= :: Parser a -> (a -> Parser b) -> Parser b
   p >>= f = P (\input -> case parse p input of
                         [] -> []
@@ -33,7 +33,7 @@ instance Alternative Parser where
   empty = P (\input -> [])
   p <|> q = P (\input -> case parse p input of
                         [] -> parse q input
-                        [(v,out)] -> [(v,out)])                         
+                        [(v,out)] -> [(v,out)])
 
 item :: Parser Char
 item = P (\input -> case input of
@@ -41,15 +41,46 @@ item = P (\input -> case input of
                     (x:xs) -> [(x, xs)])
 
 satisfy :: (Char -> Bool) -> Parser Char
-satisfy p = do 
+satisfy p = do
               x <- item
               if p x then return x else empty
 
 char :: Char -> Parser Char
 char x = satisfy (==x)
 
+-- one = fmap g item => P(\input -> [(g v, out)])
+-- one = fmap g item => P(\"abcde" -> [(g 'a', "bcde")])
+one :: Parser Char
+one  = g <$> item
+       where g x = x
+
+-- g :: Char -> Char -> (Char, Char)
+-- g :: Char -> (Char -> (Char, Char))
+-- g' = g 'a' = Char -> ('a', Char)
+-- pg = (g <$> item) => P(\input -> [(g v, out)])
+--                    => P(\"abcde" -> [(g 'a', "bcde")])
+--                    => P(\"abcde" -> [(g', "bcde")])
+-- pg <*> item => pg <*> px => P(\input -> parse (fmap g' item) out)
+--                          => P(\"abcde" -> P(\"bcde" -> [(g 'b', "cde")]))
+--                          => P(\"abcde" -> P(\"bcde" -> [('a','b'), "cde")]))
+two :: Parser (Char, Char)
+two  = g <$> item <*> item
+       where g x y = (x, y)
+
+-- pg = pure g = P (\input -> [(g, input)]) = P p 
+--        => p = (\input -> [(g, input)])
+-- px = item
+-- pg <*> px = P p <*> item = P (\input -> parse (fmap p item) out) =>
+-- 
+-- P p <*> item <*> item <*> item
+three' :: Parser (Char, Char, Char)
+three' =  pure g <*> item <*> item <*> item
+          where g x y z = (x, y, z)
+-- three2 =  g <$> item <*> item <*> item
+--           where g x y z = (x, z)
+
 three :: Parser (Char, Char)
-three = do 
+three = do
         x <- item
         item
         z <- item
@@ -62,7 +93,7 @@ three = do
 
 string :: String -> Parser String
 string [] = return []
-string (x:xs) = do  
+string (x:xs) = do
                 char x
                 string xs
                 return (x:xs)
@@ -97,7 +128,8 @@ string (x:xs) = do
 --        =>P (\"cdef" -> parse (return [] >= \_ -> return ('c':"")) "def")
 --        =>P (\"cdef" -> parse (return []) "def")
 
-main = do
+test = do
   print $ parse three "abcedf"
+  print $ parse three' "abcedf"
   print $ parse (string "abc") "abcdef"
   print $ parse (return []::Parser String) "def"
