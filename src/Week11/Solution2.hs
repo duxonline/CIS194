@@ -30,7 +30,8 @@ instance Monad Parser where
                         [(v, out)] -> parse (f v) out)
 
 instance Alternative Parser where
-  empty = P (\input -> [])
+  empty = P (const [])
+  -- empty = P (\input -> [])
   p <|> q = P (\input -> case parse p input of
                         [] -> parse q input
                         [(v,out)] -> [(v,out)])
@@ -101,7 +102,7 @@ three' =  pure g <*> item <*> item <*> item
 --            = [(('a','c'), "def")]
 
 three :: Parser (Char, Char)
-three = 
+three =
   item >>= \x ->
   item >>= \_ ->
   item >>= \z ->
