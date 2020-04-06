@@ -102,16 +102,16 @@ three' =  pure g <*> item <*> item <*> item
 --            = [(('a','c'), "def")]
 
 three :: Parser (Char, Char)
-three =
-  item >>= \x ->
-  item >>= \_ ->
-  item >>= \z ->
-          return (x,z)
--- three = do
---         x <- item
---         item
---         z <- item
---         return (x, z)          
+three = do
+        x <- item
+        item
+        z <- item
+        return (x, z)   
+-- three =
+--   item >>= \x ->
+--   item >>= \_ ->
+--   item >>= \z ->
+--           return (x,z)       
 
 string :: String -> Parser String
 string [] = return []
