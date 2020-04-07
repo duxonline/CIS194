@@ -115,14 +115,14 @@ three = do
 
 string :: String -> Parser String
 string [] = return []
-string (x:xs) = do
-                char x
-                string xs
-                return (x:xs)
--- string (x:xs) = 
---   char x    >>= \_ ->
---   string xs >>= \_ -> 
---             return (x:xs)
+-- string (x:xs) = do
+--                 char x
+--                 string xs
+--                 return (x:xs)
+string (x:xs) = 
+  char x    >>= \_ ->
+  string xs >>= \_ -> 
+            return (x:xs)
 
 -- string "abc" => satisfy (=='a') >= \_ -> string "bc" >= \_ -> return (x:xs)
 -- p = satisfy (=='a') => P (\input -> parse (return v) out)
