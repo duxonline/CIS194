@@ -24,8 +24,8 @@ testCompany
       ]
     ]
 
-data GuestList = GL [Employee] Fun
+data GuestList = GuestList [Employee] Fun
     deriving (Show, Eq)
 
 instance Ord GuestList where
-    compare (GL _ f1) (GL _ f2) = compare f1 f2
+    compare (GuestList _ f1) (GuestList _ f2) = compare f1 f2

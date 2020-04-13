@@ -4,14 +4,14 @@ import Week8.Employee
 import Data.Tree
 
 glCons :: Employee -> GuestList -> GuestList
-glCons emp (GL emps funs) = GL (emp:emps) (empFun emp + funs)
+glCons emp (GuestList emps funs) = GuestList (emp:emps) (empFun emp + funs)
 
 instance Semigroup GuestList where
-    (<>) (GL e1 f1) (GL e2 f2) = GL (e1 ++ e2) (f1 +f2)
+    (<>) (GuestList e1 f1) (GuestList e2 f2) = GuestList (e1 ++ e2) (f1 +f2)
 
 instance Monoid GuestList where
-    mempty = GL [] 0
-    mappend (GL e1 f1) (GL e2 f2) = GL (e1 ++ e2) (f1 +f2)
+    mempty = GuestList [] 0
+    mappend (GuestList e1 f1) (GuestList e2 f2) = GuestList (e1 ++ e2) (f1 +f2)
 
 moreFun :: GuestList -> GuestList -> GuestList
 moreFun = max
@@ -21,7 +21,7 @@ test1 = do
   print $ moreFun gl (glCons e mempty)
     where
       e = Emp "Sharon" 60
-      gl = GL [Emp "Frank" 47, Emp "Mary" 15 ] 62
+      gl = GuestList [Emp "Frank" 47, Emp "Mary" 15 ] 62
 
 treeFold :: (a -> [b] -> b) -> Tree a -> b
 treeFold f (Node x xs) = f x (fmap (treeFold f) xs)
@@ -82,7 +82,7 @@ test3 =
   print $ nextLevel boss guestLists
     where
       boss = Emp "Joe" 5
-      guestLists = [(GL [Emp "Stan" 9] 9, GL [Emp "Bob" 3] 3)]
+      guestLists = [(GuestList [Emp "Stan" 9] 9, GuestList [Emp "Bob" 3] 3)]
 
 maxFun :: Tree Employee -> GuestList
 maxFun = uncurry moreFun . treeFold nextLevel
@@ -90,7 +90,7 @@ maxFun = uncurry moreFun . treeFold nextLevel
 test4 = print $ maxFun testCompany
 
 formatGL :: GuestList -> String
-formatGL (GL lst fun) = "Total fun: " ++ show fun ++ "\n" ++ unlines (empName <$> lst)
+formatGL (GuestList lst fun) = "Total fun: " ++ show fun ++ "\n" ++ unlines (empName <$> lst)
 
 test5 = readFile "src/Week8/company.txt" >>= computeGuestList >>= putStr
   where
