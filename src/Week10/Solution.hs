@@ -104,8 +104,8 @@ abParser = (,) <$> char 'a' <*> char 'b'
 -- <$>                      :: ((Char, Char) -> ()) -> Parser (Char, Char) -> Parser ()
 -- const () <$> abParser    :: Parser ()
 abParser_ :: Parser ()
-abParser_ = const () <$> abParser
--- abParser_ = () <$ abParser
+-- abParser_ = const () <$> abParser
+abParser_ = () <$ abParser
 
 merge :: Integer -> Char -> Integer -> [Integer]
 merge a p b =
